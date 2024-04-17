@@ -1,0 +1,26 @@
+[package]
+name = "w25q256jv"
+license = "MIT"
+description = "An embedded-hal async driver for the W25Q256JV"
+homepage = "https://github.com/Rechenmaschine/w25q256jv"
+repository = "https://github.com/Rechenmaschine/w25q256jv"
+version = "0.1.0"
+edition = "2021"
+readme = "README.md"
+keywords = ["no_std", "embedded", "flash", "w25q256jv", "winbond"]
+authors = [
+    "Janno Onink",
+    "Dion Dokter",
+    "Henk Dieter Oordt",
+    "Louis Schell"
+]
+
+[dependencies]
+embedded-hal = "1.0.0"
+embedded-hal-async = { version = "1.0.0" }
+embedded-storage-async = { version = "0.4.1" }
+defmt = { version = "0.3.6", optional = true }
+
+[features]
+readback-check = []
+defmt = ["dep:defmt"]
