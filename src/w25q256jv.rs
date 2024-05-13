@@ -140,7 +140,7 @@ where
     /// * `address` - Address where the first byte of the buf will be read.
     /// * `buf` - Slice that is going to be filled with the read bytes.
     pub async fn read(&mut self, address: u32, buf: &mut [u8]) -> Result<(), Error<S, P>> {
-        if address + buf.len() as u32 >= CAPACITY {
+        if address + buf.len() as u32 > CAPACITY {
             return Err(Error::OutOfBounds);
         }
 
