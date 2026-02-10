@@ -161,6 +161,7 @@ where
 
     /// Resets the chip without respect to ongoing operations. Data corruption may happen if
     /// there is an ongoing or suspended internal Erase or Program operation
+    #[allow(clippy::missing_safety_doc)]
     pub async unsafe fn reset(&mut self) -> Result<(), Error<S, P>> {
         AsyncSpiDevice::write(&mut self.spi, &[Command::ResetDevice as u8])
             .await
@@ -288,11 +289,11 @@ where
         start_address: u32,
         end_address: u32,
     ) -> Result<(), Error<S, P>> {
-        if start_address % SECTOR_SIZE != 0 {
+        if !start_address.is_multiple_of(SECTOR_SIZE) {
             return Err(Error::NotAligned);
         }
 
-        if end_address % SECTOR_SIZE != 0 {
+        if !end_address.is_multiple_of(SECTOR_SIZE) {
             return Err(Error::NotAligned);
         }
 
@@ -503,6 +504,7 @@ where
 
     /// Resets the chip without respect to ongoing operations. Data corruption may happen if
     /// there is an ongoing or suspended internal Erase or Program operation
+    #[allow(clippy::missing_safety_doc)]
     pub unsafe fn blocking_reset(&mut self) -> Result<(), Error<S, P>> {
         BlockingSpiDevice::write(&mut self.spi, &[Command::ResetDevice as u8])
             .map_err(Error::SpiError)?;
@@ -628,11 +630,11 @@ where
         start_address: u32,
         end_address: u32,
     ) -> Result<(), Error<S, P>> {
-        if start_address % SECTOR_SIZE != 0 {
+        if !start_address.is_multiple_of(SECTOR_SIZE) {
             return Err(Error::NotAligned);
         }
 
-        if end_address % SECTOR_SIZE != 0 {
+        if !end_address.is_multiple_of(SECTOR_SIZE) {
             return Err(Error::NotAligned);
         }
 
