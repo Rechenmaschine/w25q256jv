@@ -6,5 +6,9 @@ It is based on the [W25Q32JV](https://crates.io/crates/w25q32jv) driver by [twee
 It supports:
 - Async SPI using `embedded-hal-async`
 - Async `embedded-storage-async`
+- Blocking SPI using `embedded-hal`
+- Blocking `embedded-storage`
+
+Blocking API methods are prefixed with `blocking_` (for example: `blocking_read`, `blocking_write`, `blocking_erase_sector`).
 
 Defmt is also supported through the `defmt` feature.

@@ -2,8 +2,7 @@
 
 use core::fmt::Debug;
 use embedded_hal::digital::{OutputPin, PinState};
-use embedded_hal::spi::SpiDevice;
-use embedded_storage_async::nor_flash::{ErrorType, NorFlashError, NorFlashErrorKind};
+use embedded_storage::nor_flash::{ErrorType, NorFlashError, NorFlashErrorKind};
 
 pub mod w25q256jv;
 
@@ -79,7 +78,7 @@ where
     HOLD: OutputPin<Error = P>,
     P: Debug,
     S: Debug,
-    SPI: SpiDevice<Error = S>,
+    SPI: embedded_hal::spi::ErrorType<Error = S>,
     WP: OutputPin<Error = P>,
 {
     type Error = Error<S, P>;

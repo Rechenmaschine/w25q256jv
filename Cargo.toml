@@ -1,7 +1,7 @@
 [package]
 name = "w25q256jv"
 license = "MIT"
-description = "An embedded-hal async driver for the W25Q256JV"
+description = "An embedded-hal driver for the W25Q256JV with async and blocking APIs"
 homepage = "https://github.com/Rechenmaschine/w25q256jv"
 repository = "https://github.com/Rechenmaschine/w25q256jv"
 version = "0.1.1"
@@ -18,6 +18,7 @@ authors = [
 [dependencies]
 embedded-hal = "1.0.0"
 embedded-hal-async = { version = "1.0.0" }
+embedded-storage = { version = "0.3.1" }
 embedded-storage-async = { version = "0.4.1" }
 defmt = { version = "0.3", optional = true }
 
