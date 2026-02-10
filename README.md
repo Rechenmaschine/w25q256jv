@@ -8,6 +8,7 @@ It supports:
 - Async `embedded-storage-async`
 - Blocking SPI using `embedded-hal`
 - Blocking `embedded-storage`
+- Optional `littlefs2` storage trait implementation behind the `littlefs2` feature
 
 Blocking API methods are prefixed with `blocking_` (for example: `blocking_read`, `blocking_write`, `blocking_erase_sector`).
 
