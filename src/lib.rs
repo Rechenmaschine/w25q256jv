@@ -6,6 +6,8 @@ use embedded_storage::nor_flash::{ErrorType, NorFlashError, NorFlashErrorKind};
 
 #[cfg(feature = "littlefs2")]
 mod external_impls;
+#[cfg(feature = "littlefs2")]
+pub use external_impls::W25q256jvLfsStorage;
 pub mod w25q256jv;
 
 pub const PAGE_SIZE: u32 = 256;

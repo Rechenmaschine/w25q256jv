@@ -22,8 +22,9 @@ embedded-storage = { version = "0.3.1" }
 embedded-storage-async = { version = "0.4.1" }
 defmt = { version = "1.0.1", optional = true }
 littlefs2 = { version = "0.6.1", default-features = false, optional = true }
+generic-array = { version = "0.14.9", optional = true }
 
 [features]
 readback-check = []
 defmt = ["dep:defmt"]
-littlefs2 = ["dep:littlefs2"]
+littlefs2 = ["dep:littlefs2", "dep:generic-array"]
