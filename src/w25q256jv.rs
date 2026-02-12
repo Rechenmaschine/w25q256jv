@@ -219,10 +219,11 @@ where
         // point to a location that is not on a page boundary,
         let chunk_len = core::cmp::min((PAGE_SIZE - (address & 0x000000FF)) as usize, buf.len());
         self.write_page(address, &buf[..chunk_len]).await?;
+        address += chunk_len as u32;
 
         for chunk in buf[chunk_len..].chunks(PAGE_SIZE as usize) {
             self.write_page(address, chunk).await?;
-            address += PAGE_SIZE;
+            address += chunk.len() as u32;
         }
 
         Ok(())
@@ -558,10 +559,11 @@ where
         // point to a location that is not on a page boundary,
         let chunk_len = core::cmp::min((PAGE_SIZE - (address & 0x000000FF)) as usize, buf.len());
         self.blocking_write_page(address, &buf[..chunk_len])?;
+        address += chunk_len as u32;
 
         for chunk in buf[chunk_len..].chunks(PAGE_SIZE as usize) {
             self.blocking_write_page(address, chunk)?;
-            address += PAGE_SIZE;
+            address += chunk.len() as u32;
         }
 
         Ok(())
