@@ -15,6 +15,7 @@ concurrency:
 
 env:
   CARGO_TERM_COLOR: always
+  CARGO_NET_RETRY: 5
 
 jobs:
   check:
@@ -31,6 +32,11 @@ jobs:
 
       - name: Rust cache
         uses: Swatinem/rust-cache@v2
+
+      - name: Install ARM GCC toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-arm-none-eabi
 
       - name: Clippy (all features, thumb target)
         run: cargo clippy --all-features --target thumbv7em-none-eabihf -- -D warnings
