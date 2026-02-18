@@ -8,7 +8,7 @@ version = "0.1.1"
 edition = "2021"
 readme = "README.md"
 keywords = ["no_std", "embedded", "flash", "w25q256jv", "winbond"]
-authors = ["Janno Onink", "Dion Dokter", "Henk Dieter Oordt", "Louis Schell"]
+authors = ["Louis Schell", "Janno Onink", "Dion Dokter", "Henk Dieter Oordt"]
 
 [dependencies]
 embedded-hal = "1.0.0"

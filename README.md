@@ -1,20 +1,67 @@
-# W25Q256JV Flash driver
+# W25Q256JV Flash Driver
 
-This is a generic driver for the W25Q256JV flash chip from Winbond. 
-It is based on the [W25Q32JV](https://crates.io/crates/w25q32jv) driver by [tweedegolf](https://github.com/tweedegolf).
+[![CI](https://github.com/Rechenmaschine/w25q256jv/actions/workflows/rust-ci.yml/badge.svg?branch=master)](https://github.com/Rechenmaschine/w25q256jv/actions/workflows/rust-ci.yml)
 
-It supports:
-- Async SPI using `embedded-hal-async`
-- Async `embedded-storage-async`
-- Blocking SPI using `embedded-hal`
-- Blocking `embedded-storage`
-- Optional `littlefs2` storage adapter (`LittlefsAdapter`) behind the `littlefs2` feature
+> `no_std` driver for the Winbond W25Q256JV NOR flash chip.
 
-Blocking API methods are prefixed with `blocking_` (for example: `blocking_read`, `blocking_write`, `blocking_erase_sector`).
+- Async API using `embedded-hal-async`
+- Blocking API using `embedded-hal`
+- Implements `embedded-storage-async` and `embedded-storage`
+- Optional `littlefs2` adapter via `LittlefsAdapter`
+- Optional `defmt` support
 
-For littlefs2, use the adapter wrapper instead of implementing `Storage` directly on the
-driver, so cache/lookahead sizes are user-configurable at the type level:
+This crate is based on the [w25q32jv](https://crates.io/crates/w25q32jv) driver by tweedegolf.
 
-`LittlefsAdapter<'a, SPI, HOLD, WP, CacheSize, LookaheadSize>`
+## Usage Examples
 
-Defmt is also supported through the `defmt` feature.
+### Blocking API
+
+```rust
+use w25q256jv::W25q256jv;
+
+let mut flash = W25q256jv::new(spi, hold, wp)?;
+
+flash.blocking_erase_sector(0)?;
+flash.blocking_write(0, b"hello")?;
+
+let mut buf = [0u8; 5];
+flash.blocking_read(0, &mut buf)?;
+```
+
+### Async API
+
+```rust
+use w25q256jv::{W25q256jv, SECTOR_SIZE};
+
+let mut flash = W25q256jv::new(spi, hold, wp)?;
+
+flash.erase_range(0, SECTOR_SIZE).await?;
+flash.write(0, b"hello").await?;
+
+let mut buf = [0u8; 5];
+flash.read(0, &mut buf).await?;
+```
+
+### littlefs2 Adapter
+
+Enable the `littlefs2` feature and wrap the flash driver in `LittlefsAdapter`:
+
+```rust
+use typenum::{U16, U256};
+use w25q256jv::{LittlefsAdapter, W25q256jv};
+
+type FlashStorage<'a, SPI, HOLD, WP> = LittlefsAdapter<'a, SPI, HOLD, WP, U256, U16>;
+
+let mut flash = W25q256jv::new(spi, hold, wp)?;
+let mut storage = FlashStorage::new(&mut flash);
+```
+
+## Cargo Features
+
+- `defmt`: enables `defmt::Format` for `Error`
+- `littlefs2`: enables `LittlefsAdapter` and `littlefs2` integration
+- `readback-check`: verifies writes and erases by reading back data (slower)
+
+## License
+
+MIT
