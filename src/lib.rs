@@ -4,7 +4,6 @@ use core::fmt::Debug;
 use embedded_hal::digital::{OutputPin, PinState};
 use embedded_storage::nor_flash::{ErrorType, NorFlashError, NorFlashErrorKind};
 
-#[cfg(feature = "littlefs2")]
 mod external_impls;
 #[cfg(feature = "littlefs2")]
 pub use external_impls::LittlefsAdapter;
