@@ -16,13 +16,13 @@ fn to_littlefs_error<S: Debug, P: Debug>(error: Error<S, P>) -> LittleFsError {
 }
 
 /// littlefs2 storage adapter for [`W25q256jv`] with configurable cache/lookahead sizes.
-pub struct W25q256jvLfsStorage<'a, SPI, HOLD, WP, CacheSize, LookaheadSize> {
+pub struct LittlefsAdapter<'a, SPI, HOLD, WP, CacheSize, LookaheadSize> {
     flash: &'a mut W25q256jv<SPI, HOLD, WP>,
     _marker: PhantomData<(CacheSize, LookaheadSize)>,
 }
 
 impl<'a, SPI, HOLD, WP, CacheSize, LookaheadSize>
-    W25q256jvLfsStorage<'a, SPI, HOLD, WP, CacheSize, LookaheadSize>
+    LittlefsAdapter<'a, SPI, HOLD, WP, CacheSize, LookaheadSize>
 {
     pub fn new(flash: &'a mut W25q256jv<SPI, HOLD, WP>) -> Self {
         Self {
@@ -34,11 +34,20 @@ impl<'a, SPI, HOLD, WP, CacheSize, LookaheadSize>
     pub fn into_inner(self) -> &'a mut W25q256jv<SPI, HOLD, WP> {
         self.flash
     }
+
+    /// Returns a mutable reference to the underlying flash driver.
+    ///
+    /// # Safety
+    /// This is raw flash access that bypasses the littlefs driver.
+    /// Changes through this reference can break littlefs invariants and corrupt storage.
+    pub unsafe fn inner_mut(&mut self) -> &mut W25q256jv<SPI, HOLD, WP> {
+        self.flash
+    }
 }
 
 #[allow(deprecated)]
 impl<'a, SPI, S: Debug, P: Debug, HOLD, WP, CacheSize, LookaheadSize> Storage
-    for W25q256jvLfsStorage<'a, SPI, HOLD, WP, CacheSize, LookaheadSize>
+    for LittlefsAdapter<'a, SPI, HOLD, WP, CacheSize, LookaheadSize>
 where
     SPI: SpiDevice<Error = S>,
     HOLD: OutputPin<Error = P>,

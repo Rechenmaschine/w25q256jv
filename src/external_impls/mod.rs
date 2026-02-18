@@ -1,3 +1,3 @@
 mod littlefs;
 
-pub use littlefs::W25q256jvLfsStorage;
+pub use littlefs::LittlefsAdapter;
